@@ -11,3 +11,13 @@ logoutBut.action = () => ApiConnector.logout(response => {
     }
 });
 
+ApiConnector.current(response => {
+    console.log(response);
+    if (response.success) {
+        return ProfileWidget.showProfile(response.data);
+    } else {
+        alert('Что-то пошло не так...');
+    }
+});
+
+const ratesBrd = new RatesBoard();
