@@ -1,23 +1,30 @@
 "use strict";
-const logoutBut = new LogoutButton();
+const logoutButton = new LogoutButton();
 
-logoutBut.action = () => ApiConnector.logout(response => {
-    console.log(response);
+logoutButton.action = () => ApiConnector.logout(response => {
     if (response.success) {
         location.reload();
-        return logoutBut.logoutClick();
-    } else {
-        alert('Что-то пошло не так...');
     }
 });
 
 ApiConnector.current(response => {
-    console.log(response);
     if (response.success) {
-        return ProfileWidget.showProfile(response.data);
-    } else {
-        alert('Что-то пошло не так...');
+        ProfileWidget.showProfile(response.data);
     }
 });
 
-const ratesBrd = new RatesBoard();
+const ratesBoard = new RatesBoard();
+
+function getStFunc() {
+    ApiConnector.getStocks(response => {
+        console.log(response);
+        if (response.success) {
+            ratesBoard.clearTable();
+            ratesBoard.fillTable(response.data);
+        }
+    });
+}
+
+getStFunc();
+
+setInterval(getStFunc, 60000);
